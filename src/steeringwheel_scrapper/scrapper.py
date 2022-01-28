@@ -33,6 +33,10 @@ class Scrapper:
         self.storeName = self._getstorename()
         self.body = self._getrequest()
 
+    def get_item_price(self) -> str:
+        price = ''.join(self._get_price().split())
+        return f'{self.storeName} - {price}'
+
     def _get_price(self) -> Any:
         soup = BeautifulSoup(self.body, 'html.parser')
         if self.storeName == 'www.coolshop.de':
@@ -50,7 +54,7 @@ class Scrapper:
             return soup.find("div", class_="cssprice")['title']
         elif self.storeName == 'www.playox.de':
             return soup.find("meta", itemprop="price")['content']
-    
+
     def _getstorename(self) -> str:
         return urlparse(self.url).netloc
 
@@ -59,3 +63,6 @@ class Scrapper:
 
     def _getrequest(self) -> str:
         return self.request.text
+
+for store in stores:
+    print(Scrapper(store['url']).get_item_price())
