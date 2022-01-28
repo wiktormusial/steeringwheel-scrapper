@@ -1,28 +1,8 @@
 import requests
+import json
 from urllib.parse import urlparse
 from typing import Any
 from bs4 import BeautifulSoup
-
-stores = [
-    {
-        'url': 'https://www.otto.de/p/logitech-g-g923-fuer-xbox-und-pc-lenkrad-C1217986489',
-    },
-    {
-        'url': 'https://www.coolshop.de/produkt/logitech-g923-racing-wheel-and-pedals-for-xbox-one-and-pc/2368WJ/',
-    },
-    {
-        'url': 'https://www.kaufland.de/product/362041609/'
-    },
-    {
-        'url': 'https://www.galaxus.de/de/s1/product/logitech-g-g923-trueforce-for-pc-and-playstation-gaming-controller-14032616'
-    },
-    {
-        'url': 'https://www.boomstore.de/Joysticks-und-Gamepads/Logitech-G-G920-Analog-/-Digital-Lenkrad-Pedale-f%C3%BCr-PC,-Xbox-One-Schwarz.5099206058996.html'
-    },
-    {
-        'url': 'https://www.playox.de/logitech-g923-13077149'
-    },
-]
 
 
 class Scrapper:
@@ -33,7 +13,11 @@ class Scrapper:
         self.storeName = self._getstorename()
         self.body = self._getrequest()
 
-    def get_item_price(self) -> str:
+    def get_price(self) -> str:
+        price = ''.join(self._get_price().split())
+        return f'{price}'
+
+    def get_storename_with_price(self) -> str:
         price = ''.join(self._get_price().split())
         return f'{self.storeName} - {price}'
 
@@ -63,6 +47,3 @@ class Scrapper:
 
     def _getrequest(self) -> str:
         return self.request.text
-
-for store in stores:
-    print(Scrapper(store['url']).get_item_price())
